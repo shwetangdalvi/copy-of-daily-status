@@ -1,0 +1,91 @@
+{% extends "layout.html" %}
+{% block content %}
+    <header class="site-header">
+      <nav class="navbar navbar-expand-md navbar-dark bg-steel fixed-top">
+        <div class="container">
+          <a class="navbar-brand mr-4" href="/">Daily Status</a>
+          <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarToggle" aria-controls="navbarToggle" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+          </button>
+          <div class="collapse navbar-collapse" id="navbarToggle">
+            <!-- Navbar Right Side -->
+            <div class="navbar-nav">
+                <a class="nav-item nav-link" href="{{ url_for('Assign') }}">Assign</a>
+                <a class="nav-item nav-link" href="{{ url_for('RegisterProject') }}">Register Project</a>
+                <a class="nav-item nav-link" href="{{ url_for('Register') }}">Register User</a>
+                <a class="nav-item nav-link" href="{{ url_for('logout') }}">Logout</a>
+            </div>
+          </div>
+        </div>
+      </nav>
+    </header>
+    <div class="content-section">
+        <form method="POST" action="">
+            {{ form.hidden_tag() }}
+            {{ form.csrf_token }}
+            <fieldset class="form-group">
+                <legend class="border-bottom mb-4">Select Project</legend>
+                
+                <select class="form-control" id="continent_selector" name="project" size=1>
+                    {{ form.project.label(class="form-control-label") }}
+                        <option value= >Select Project</option>
+               
+                    {% for p in choicesp %}
+
+                        <option value= '{{p.project_name}}' >{{p.project_name}}</option>
+
+                    {% endfor %}
+                     
+                </select>
+                <legend class="border-bottom mb-4">Select User</legend>
+                <select class="form-control" id="continent_selector" name="username" size=1>
+                    {{ form.username.label(class="form-control-label") }}
+                    <option value= >Select username</option>
+                    {% for u in choices %}
+
+                        <option value= '{{u.username}}' >{{u.username}}</option>
+
+                    {% endfor %}
+                     
+                </select>
+                <legend class="border-bottom mb-4">Select Action</legend>
+                <div class="form-group">
+                    {{ form.radio(class="form-control form-control-lg") }}
+                </div>
+                <!-- <div class="form-group">
+                    {{ form.submit(class="btn btn-outline-info") }}
+                </div> -->
+                <!-- <button class="btn-outline-info" onclick="myFunction()">Delete</button>
+
+                <p id="demo"></p>
+
+                <script>
+                function myFunction() {
+                  var txt;
+                  if (confirm("Are you sure?")) {
+                    txt = form.submit  ;
+                  } 
+                  document.getElementById("demo").innerHTML = txt;
+                }
+                </script> -->
+                <script type="text/javascript">
+
+                function confSubmit(form) {
+                if (confirm("Are you sure you want to Delete?")) {
+                form.submit();
+                }
+
+                else {
+                alert("You decided to not Delete?");
+                }
+                }
+                </script>
+                </head>
+                <body>
+
+                <input type="button" class="btn-outline-info" onClick="confSubmit(this.form);" value="Submit">
+                </form>
+            </fieldset>     
+        </form>
+    </div>
+{% endblock content %}

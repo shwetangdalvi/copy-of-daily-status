@@ -1,0 +1,172 @@
+{% extends "layout.html" %}
+{% block content %}
+  <head>
+    <script>
+      $(document).ready(function() {
+                  $('#project').change(function(){
+                    var project = $('#project').val();
+
+                    $.getJSON(
+                      '/username' + '/' + project,
+                        function(data){
+
+                          $('#result').find('option').remove();
+
+                          $.each(data, function(key, val) {
+                          var option_item = '<option value="' + val + '">' + val + '</option>'
+                          $('#result').append(option_item);
+                           });
+                        
+                          }
+                        );
+                      });
+                    });
+    </script>
+  </head>
+  <header class="site-header">
+      <nav class="navbar navbar-expand-md navbar-dark bg-steel fixed-top">
+        <div class="container">
+          <a class="navbar-brand mr-4" href="/">Daily Status</a>
+          <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarToggle" aria-controls="navbarToggle" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+          </button>
+          <div class="collapse navbar-collapse" id="navbarToggle">
+            <!-- Navbar Right Side -->
+            <div class="navbar-nav">
+                <a class="nav-item nav-link" href="{{ url_for('changepassword') }}">Change Password</a>
+                <a class="nav-item nav-link" href="{{ url_for('StatusUpdate') }}">Status Update</a>
+                <a class="nav-item nav-link" href="{{ url_for('logout') }}">Logout</a>
+            </div>
+          </div>
+        </div>
+      </nav>
+    </header>
+    <div class="content-section">
+      <form class="form-horizontal" role="form" action="" method="POST">
+
+                <table border="0" class="table table-condensed" style="margin-bottom: 0px;">
+                    <tbody>
+                        <tr>
+                            <td width="16%"><label class="control-label">Select Project</label></td>
+                            <td width="80%">
+                               <select class="form-control" id="project" name="project" size=1 required>
+                                  {{ form.project.label(class="form-control-label") }}
+
+                                    <option value="" >Select Project</option>
+
+                    
+                                    {% for p in choicesp %}
+
+                                      <option value= '{{p}}' >{{p}}</option>
+
+                                    {% endfor %}
+                     
+                              </select>
+                            </td>
+                            <td width="16%" align="right"><label class="control-label">Select Date</label></td>
+                            <td width="18%">
+                              {{ form.date(class="form-control form-control-lg", placeholder="yy-mm-dd") }}
+                            </td>
+                            <td width="8%">{{ form.submit(class="btn btn-outline-info") }}</td>
+                        </tr>
+                    </tbody>
+                </table>
+              </form>
+          </div>
+      {% if cc or bcc%}
+        <div class="content-section" style="margin-bottom: 5px;">
+            <form method="POST" method="GET">
+                <table border="0" class="table table-striped" style="margin-bottom: 0px;">
+                    <tbody>
+                        <tr>
+                            <td width="10%"><label class="control-label">To :</label></td>
+                            <td>{{ form.to(class="form-control form-control-lg",value=cc.Cromail) }}</td>
+                        </tr>
+                        <tr>
+                            <td width="10%"><label class="control-label">cc :</label></td>
+                            <td>{{ form.mailcc(class="form-control form-control-lg",value=cc.mailcc) }}</td>
+                        </tr>
+                        <tr>
+                            <td width="10%"><label class="control-label">bcc :</label></td>
+                            <td>{{ form.mailbcc(class="form-control form-control-lg",value=bcc) }}</td>
+                        </tr>
+                        <tr>
+                            <td width="10%"><label class="control-label">Subject :</label></td>
+                            <td>{{ form.subject(class="form-control form-control-lg",value=sub) }}</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </form>
+        </div>
+        {% endif %}
+        <div class="content-section">
+          <form method="POST" method="GET">
+                {% if stat %}
+                     <!-- <div class="content-section" style="font-family:'Tahoma'"> -->
+                      <div class="font-style" style="/* font-style: unset; *//* padding: 0px 0px; */font-family: Tahoma;/* font-size: large; */font: status-bar;font-size: 14.5px;">
+                        Hi,
+                        <br><br>Following are the status updates for 
+                        <b>{{formatdate}}</b>,
+                        <br><br>
+                        <i><b>Devlopment Status:</b></i>
+                        <br><br>
+                    {% for s in stat %}
+                        <div style="height:30px;text-valign:center;">
+                        <b>Name : {{s.username}}</b>
+                        </div>
+
+                        {% for u in s['status']%}
+                          {% if u.jira_no == 'TASK' %}
+                            {{s['status'].index(u)+1}}. <b>{{u.jira_no}} : </b>{{u.desc}}<br>
+                          {% else %}
+                            {{s['status'].index(u)+1}}. <a href={{cc.ticketl+u.jira_no}}>{{u.jira_no}}:</a> {{ u['desc']}}<br>
+                          {% endif %}
+                            &nbsp;&nbsp;&nbsp;&nbsp;Status : <b>{{u['status']}}</b>
+                            <div>
+                                {% for cmd in u['Comment'] %}
+                                  <li style="padding-left:1.5em">{{cmd}}
+                                {% endfor%}
+                          </div>
+                              <br>
+                      {% endfor%}
+                    {% endfor %}
+                  </div>
+                {% else %}
+                      <div class = "font-style"style="/* font-style: unset; *//* padding: 0px 0px; */font-family: Tahoma;font: status-bar;">
+                        Hi,
+                        <br><br>Following are the status updates for 
+                        <b>{{formatdate}}</b>,
+                        <br><br>
+                {% endif %}
+                {% if remstat %}
+                  <div class="font-style" style="/* font-style: unset; *//* padding: 0px 0px; */font-family: Tahoma;/* font-size: large; */font: status-bar;font-size: 14.5px;">
+                    {% for s in remstat %}
+                    <div style="height:30px;text-valign:center;">
+                        <b>Name : {{s.username}}</b>
+                      </div>
+                        {% for i in s.pstatus %}
+                          <i><b>{{i.env}} :</b></i>
+                            <br><br>
+                            {% for st in i.status%}
+                              {% if st.jira_no == 'TASK' %}
+                                {{i['status'].index(st)+1}}. <b>{{st.jira_no}} : </b>{{st.desc}}<br>
+                              {% else %}
+                                {{i['status'].index(st)+1}}. <a href={{cc.ticketl+st.jira_no}}>{{st.jira_no}}:</a> {{ st['desc']}}<br>
+                              {% endif %}
+                            &nbsp;&nbsp;&nbsp;&nbsp;Status : <b>{{st['status']}}</b>
+                            
+                              {% for cmd in st['Comment'] %}
+                                 <li style="padding-left:1.5em">{{cmd}}
+                              {% endfor%}
+                            </li>
+                              <br>
+                            {% endfor%}
+                        {% endfor%}
+                    {% endfor%}  
+
+                {% endif %}
+              </div>
+
+          </form>
+        </div>
+{% endblock content %}

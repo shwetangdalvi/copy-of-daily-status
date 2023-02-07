@@ -1,0 +1,54 @@
+{% extends "layout.html" %}
+{% block content %}
+    <header class="site-header">
+      <nav class="navbar navbar-expand-md navbar-dark bg-steel fixed-top">
+        <div class="container">
+          <a class="navbar-brand mr-4" href="/">Daily Status</a>
+          <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarToggle" aria-controls="navbarToggle" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+          </button>
+          <div class="collapse navbar-collapse" id="navbarToggle">
+            <!-- Navbar Right Side -->
+            <div class="navbar-nav">
+                <a class="nav-item nav-link" href="{{ url_for('DeleteD') }}">Delete User</a>
+                <a class="nav-item nav-link" href="{{ url_for('Register') }}">Register User</a>
+                <a class="nav-item nav-link" href="{{ url_for('RegisterProject') }}">Register Project</a>
+                <a class="nav-item nav-link" href="{{ url_for('logout') }}">Logout</a>
+            </div>
+          </div>
+        </div>
+      </nav>
+    </header>
+    <div class="content-section">
+        <form method="POST" method="GET" action="Assign">
+            {{ form.hidden_tag() }}
+            {{ form.csrf_token }}
+            <fieldset class="form-group">
+                <legend class="border-bottom mb-4">Select Username</legend>
+                <select class="form-control"  id="continent_selector" name="username" size=10 multiple>
+                    {{ form.username.label(class="form-control-label") }}
+                    
+                     {% for u in choices %}
+
+                        <option value= {{u.username}} >{{u.username}}</option>
+
+                     {% endfor %}
+
+                </select>
+                <legend class="border-bottom mb-4">Select Project</legend>
+                <select class="form-control" id="continent_selector" name="project" size=10 multiple>
+                    {{ form.project.label(class="form-control-label") }}
+                    
+                     {% for p in choicesp %}
+
+                        <option value= {{p.project_name}} >{{p.project_name}}</option>
+
+                     {% endfor %}
+                     
+                </select>
+                <div class="form-group">
+                    {{ form.submit(class="btn btn-outline-info") }}
+                </div>
+        </form>
+    </div>
+{% endblock content %}

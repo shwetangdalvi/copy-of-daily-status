@@ -1,0 +1,117 @@
+{% extends "layout.html" %}
+{% block content %}
+    <header class="site-header">
+      <nav class="navbar navbar-expand-md navbar-dark bg-steel fixed-top">
+        <div class="container">
+          <a class="navbar-brand mr-4" href="/">Daily Status</a>
+          <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarToggle" aria-controls="navbarToggle" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+          </button>
+          <div class="collapse navbar-collapse" id="navbarToggle">
+            <!-- Navbar Right Side -->
+            <div class="navbar-nav">
+                <a class="nav-item nav-link" href="{{ url_for('View_status') }}">View Status</a>
+                <a class="nav-item nav-link" href="{{ url_for('changepassword') }}">Change Password</a>
+                <a class="nav-item nav-link" href="{{ url_for('logout') }}">Logout</a>
+            </div>
+          </div>
+        </div>
+      </nav>
+    </header>
+    <div class="content-section">
+        <form class="form-horizontal" role="form" action="" method="POST">
+
+                <table border="0" class="table table-striped" style="margin-bottom: 0px;">
+                    <tbody>
+                        <tr>
+                            <td width="16%"><label class="control-label">Select Project</label></td>
+                            <td width="80%">
+                               <select class="form-control" id="project" name="project" size=1 required>
+                                  {{ form.project.label(class="form-control-label") }}
+
+                                    <option value=0 >Select Project</option>
+
+                    
+                                    {% for p in choices %}
+
+                                      <option value= '{{p}}' >{{p}}</option>
+
+                                    {% endfor %}
+                     
+                              </select>
+                            </td>
+                            <td width="16%" align="right"><label class="control-label">Select Date</label></td>
+                            <td width="18%">
+                              {{ form.date(class="form-control form-control-lg", placeholder="yy-mm-dd") }}
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+                <table border="0" class="table table-striped" style="margin-bottom: 0px;">
+                    <tbody>
+                            <tr><td width="7d%"><label class="control-label">Ticket No</label></td>
+                            <td width="13%">
+                                {% if form.jirano.errors %}
+                                    {{ form.jirano(class="form-control form-control-lg is-invalid") }}
+                                    <div class="invalid-feedback">
+                                    {% for error in form.jirano.errors %}
+                                        <span>{{ error }}</span>
+                                    {% endfor %}
+                                    </div>
+                                    {% else %}
+                                        {{ form.jirano(class="form-control form-control-lg" ) }}
+                                    {% endif %}
+                            </td>
+                            <td width="5%"><label class="control-label">Title.</label></td>
+                            <td><textarea placeholder="Title (50 characters)" min="50" max="60" class="form-control" name="desc" required></textarea></td>
+                        </tr>
+                    </tbody>
+                </table>
+                <table border="0" class="table table-striped" style="margin-bottom: 0px;">
+                    <tbody>
+                        <tr>
+                            <td width="11%"><label class="control-label">Select Status</label></td>
+                            <td width="20%">
+                                <select class="form-control" name="status" id="continent_selector" size=1 required>
+                                    <option value=0 >Select Project</option>
+                                    <option value= 'To do' >To DO</option>
+                                    <option value= 'In Devlopment' >In Devlopment</option>
+                                    <option value= 'WorkIn Progress' >Work In Progress</option>
+                                    <option value= 'UAT' >UAT</option>
+                                    <option value= 'Code Review' >Code Review</option>
+                                    <option value= 'Analysis'>Analysis</option>
+                                    <option value= 'Done' >Done</option>
+                                </select>
+                            </td>
+                            <td width="7%"><label class="control-label">Env</label></td>
+                            <td width="25%">
+                                <select name = env class="form-control" name="env" id="continent_selector" size=1 required>
+                                    <option value=0 >Select Project</option>
+                                    <option value= 'Development Status'>Development Status</option>
+                                    <option value= 'Development Testing Status'>Development Testing Status</option>
+                                    <option value= 'UAT Testing'>UAT Testing</option>
+                                </select>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+                <table border="0" class="table table-striped" style="margin-bottom: 0px;">
+                    <tbody>
+                        <tr>
+                            <td width="11%"><label class="control-label">Comments</label></td>
+                            <td><textarea placeholder="Comments" class="form-control" name="comments" required></textarea></td>
+                        </tr>
+                    </tbody>
+                </table>
+                <table border="0" class="table table-striped" style="margin-bottom: 0px;">
+                    <tbody>
+                        <tr>
+                            <td width="8%">
+                                {{ form.submit(class="btn btn-outline-info") }}
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+        </form>
+    </div>
+{% endblock content %}

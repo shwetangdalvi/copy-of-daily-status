@@ -1,0 +1,8 @@
+review me:
+- "*"
+
+bug:
+- "**"
+
+Art Relation:
+- "dailystatus/*"
